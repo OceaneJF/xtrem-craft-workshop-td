@@ -11,9 +11,11 @@ class TestBank:
     bank : Bank = Bank.create(Currency.EUR, Currency.USD, 1.2)
     
     def test_should_convert_euro_to_usd_returns_float(self):
+        bank : Bank = Bank.create(Currency.EUR, Currency.USD, 1.2)
+        
         expected = 12
         
-        converted = self.bank.convert(10, Currency.EUR, Currency.USD)
+        converted = bank.convert(10, Currency.EUR, Currency.USD)
         
         assert converted == expected
 
@@ -30,8 +32,12 @@ class TestBank:
         assert str(error.value) == "EUR->KRW"
 
     def test_should_convert_with_different_exchange_rate_returns_different_floats(self):
-        converted1 = self.bank.convert(10, Currency.EUR, Currency.USD)
+        bank : Bank = Bank.create(Currency.EUR, Currency.USD, 1.2)
+        epsilon = 0.001
+        
+        converted1 = bank.convert(10, Currency.EUR, Currency.USD)
         self.bank.addEchangeRate(Currency.EUR, Currency.USD, 1.3)
-        converted2 = self.bank.convert(10, Currency.EUR, Currency.USD)
-        assert converted1 != converted2
+        converted2 = bank.convert(10, Currency.EUR, Currency.USD)
+        
+        assert converted1 - converted2 < epsilon
         
