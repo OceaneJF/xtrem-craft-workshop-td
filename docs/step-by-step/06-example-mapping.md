@@ -54,7 +54,6 @@ So that I can evaluate the total amount in a currency
 - Pour chaque règle, nous avons besoin d'un ou plusieurs exemples pour les illustrer. Les écrire sur des post-it verts et les placer sous la règle correspondante.
 - En échangeant sur ces exemples, vous pouvez découvrir des questions pour lesquelles personne autour de la table ne peut répondre : les écrire sur des post-it rouges et continuer la conversation. 
 
-![img.png](img.png)
 ## Format de restitution
 (pour chaque US)
 

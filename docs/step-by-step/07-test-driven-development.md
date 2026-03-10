@@ -15,3 +15,8 @@ Itérez sur les différents exemples jusqu'à ce que la User Story soit terminé
 Individuellement, donnez les 3 idées les plus importantes sur le TDD et une question qui reste en suspend.
 
 > Qu'avez-vous appris de l'introduction de nouveaux rôles en mob programming ?
+J'ai appris que écrire les tests d'abord nous oblige à passer à l'implémentation du code par la suite 
+> QUe les tests sont comme une documentation
+> Qu'il faut avoir une bonne compréhension des specs pour faire les tests
+
+Question qui reste en suspend : Comment faire pour ne vision complete du code pour implémenter les tests avant meme de l'avoir fait?
