@@ -34,8 +34,9 @@ class TestPortfolio:
 
     def test_shouldnot_add_an_unvalid_currency(self):
         portfolio: Portfolio = Portfolio()
-        with pytest.raises(TypeError, match="currency should be an instance of Currency"):
+        with pytest.raises(TypeError) as error:
             portfolio.deposit(10, "Yen")
+        assert str(error.value) == "currency should be an instance of Currency"
 
     def test_shouldnot_convert_if_exchange_rate_is_missing(self):
         portfolio: Portfolio = Portfolio()
@@ -52,3 +53,10 @@ class TestPortfolio:
             portfolio.deposit(-1, Currency.EUR)
         
         assert str(error.value) == "amount should be positive"
+
+    def test_shouldnot_evaluate_with_an_invalid_currency(self):
+        portfolio: Portfolio = Portfolio()
+        bank: Bank = Bank.create(Currency.EUR, Currency.USD, 1.2)
+        with pytest.raises(TypeError) as error:
+            portfolio.evaluate(bank, "Yen")
+        assert str(error.value) == "currency should be an instance of Currency"
