@@ -1,14 +1,18 @@
+from xterm_craft_workshop.money import Money
 from xterm_craft_workshop.currency import Currency
 from xterm_craft_workshop.money_calculator import MoneyCalculator
 
 class TestMoney:
     def test_add_in_usd_returns_value(self):
-        amount : int = 5
-        value : int = 10
-        currency : Currency = Currency.USD
-        result : float = MoneyCalculator.add(amount, currency, value)
-        assert isinstance(result, float)
-        assert currency is not None
+
+        tenDollars =  Money(10, Currency.USD)
+        fiveDollars =  Money(5, Currency.USD)
+        expectedResult = Money(15, Currency.USD)
+        
+        res = fiveDollars + tenDollars
+        
+        assert res == expectedResult
+        assert isinstance(res, Money)
 
     def test_multiply_in_euros_returns_positive_number(self):
         amount : int = 10
@@ -24,3 +28,5 @@ class TestMoney:
         currency : Currency = Currency.USD
         result = MoneyCalculator.divide(amount, currency, value) 
         assert result == expected
+
+    
