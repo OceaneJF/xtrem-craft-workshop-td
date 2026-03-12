@@ -27,7 +27,7 @@ Vous pouvez également joindre une photo du résultat obtenu en utilisant les po
 
 Exemple:
 ```
-Ajout de devise de "BG Euro" => impossible , erreur de validation du formulaireAjout de devise de "BG Euro"
+Ajout de devise de "Yen" => impossible , erreur de validation du formulaireAjout de devise de "Yen"
 ```
 
 > Que ce passe t'il quand on ajoute un e devise (qui exsite ) dans le portfolio?
