@@ -1,0 +1,65 @@
+name: CI Python
+
+on:
+  push:
+    paths:
+      - "python/**"
+  pull_request:
+    paths:
+      - "python/**"
+
+jobs:
+
+  build-and-test:
+    name: Build & Tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: python
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Build
+        run: uv sync
+
+      - name: Run tests
+        run: uv run task test
+
+      - name: Run linter
+        run: uv run task ruff
+        continue-on-error: true
+
+  mutation-tests:
+    name: Mutation Tests
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master' || github.event_name == 'pull_request'
+    defaults:
+      run:
+        working-directory: python
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Build
+        run: uv sync
+
+      - name: Run mutation tests
+        run: uv run mutmut run
+        continue-on-error: true
+
+      - name: Export mutation report as JSON
+        run: |
+          mkdir -p ../docs/solution/mutation-testing
+          uv run mutmut stats > ../docs/solution/mutation-testing/mutmut-stats.json
+        continue-on-error: true
+
+      - name: Save mutation report as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mutation-report
+          path: docs/solution/mutation-testing/
