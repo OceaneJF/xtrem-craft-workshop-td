@@ -60,3 +60,9 @@ class TestPortfolio:
         with pytest.raises(TypeError) as error:
             portfolio.evaluate(bank, "Yen")
         assert str(error.value) == "currency should be an instance of Currency"
+
+    def test_should_accept_zero_amount(self):
+        portfolio: Portfolio = Portfolio()
+        portfolio.deposit(0, Currency.EUR)
+        bank: Bank = Bank.create(Currency.EUR, Currency.USD, 1.2)
+        assert portfolio.evaluate(bank, Currency.USD) == 0
