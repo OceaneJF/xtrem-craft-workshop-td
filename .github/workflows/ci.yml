@@ -10,8 +10,8 @@ on:
 
 jobs:
 
-  build-and-test:
-    name: Build & Tests
+  lint:
+    name: Linter
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -21,6 +21,31 @@ jobs:
 
       - name: Install uv
         uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-dependency-glob: "python/pyproject.toml"
+
+      - name: Build
+        run: uv sync
+
+      - name: Run linter
+        run: uv run task mypy
+        continue-on-error: true
+
+  test:
+    name: Tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: python
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-dependency-glob: "python/pyproject.toml"
 
       - name: Build
         run: uv sync
@@ -28,14 +53,11 @@ jobs:
       - name: Run tests
         run: uv run task test
 
-      - name: Run linter
-        run: uv run task ruff
-        continue-on-error: true
-
   mutation-tests:
     name: Mutation Tests
-    runs-on: ubuntu-latest
+    needs: test
     if: github.ref == 'refs/heads/master' || github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: python
@@ -44,6 +66,9 @@ jobs:
 
       - name: Install uv
         uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-dependency-glob: "python/pyproject.toml"
 
       - name: Build
         run: uv sync
