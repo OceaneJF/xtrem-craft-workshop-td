@@ -1,5 +1,5 @@
-from python.src.bank import Bank
-from python.src.currency import Currency
+from xterm_craft_workshop.bank import Bank
+from xterm_craft_workshop.currency import Currency
 
 
 class Portfolio:

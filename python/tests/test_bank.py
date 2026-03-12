@@ -1,9 +1,8 @@
 import pytest
-import re
 
-from python.src.bank import Bank
-from python.src.currency import Currency
-from python.src.missing_exchange_rate_error import MissingExchangeRateError
+from xterm_craft_workshop.bank import Bank
+from xterm_craft_workshop.currency import Currency
+from xterm_craft_workshop.missing_exchange_rate_error import MissingExchangeRateError
 
 
 class TestBank:
