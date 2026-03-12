@@ -15,11 +15,14 @@ class TestMoney:
         assert isinstance(res, Money)
 
     def test_multiply_in_euros_returns_positive_number(self):
-        amount : int = 10
-        value : int = 4
-        currency : Currency = Currency.USD
-        result : float = MoneyCalculator.times(amount, currency, value)
-        assert result > 0
+        tenDollars =  Money(10, Currency.USD)
+        value = 2.0
+        expectedResult = Money(20, Currency.USD)
+        
+        res =  value * tenDollars
+        
+        assert res == expectedResult
+        assert isinstance(res, Money)
 
     def test_divide_in_korean_won_returns_float(self):
         expected : float = 1000.5

@@ -15,3 +15,11 @@ class Money:
     def __eq__(self, value):
         return self.amount == value.amount and self.currency == value.currency
         
+    def __mul__(self, other):
+        if not isinstance(other, (int, float)):
+            raise TypeError("Can only multiply Money by a number")
+        res = self.amount * other
+        return Money(res, self.currency)
+
+    def __rmul__(self, other):
+        return self.__mul__(other)
