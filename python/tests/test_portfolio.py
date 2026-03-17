@@ -65,3 +65,9 @@ class TestPortfolio:
         portfolio.deposit(Money(0, Currency.EUR))
         bank: Bank = Bank.create(Currency.EUR, Currency.USD, 1.2)
         assert portfolio.evaluate(bank, Currency.USD) == Money(0, Currency.USD)
+
+    def test_shouldnot_deposit_an_invalid_money(self):
+        portfolio: Portfolio = Portfolio()
+        with pytest.raises(TypeError) as error:
+            portfolio.deposit("not a money")
+        assert str(error.value) == "money should be an instance of Money"
