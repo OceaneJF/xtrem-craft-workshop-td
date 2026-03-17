@@ -23,3 +23,9 @@ class Money:
 
     def __rmul__(self, other):
         return self.__mul__(other)
+
+    def __truediv__(self, other):
+        if not isinstance(other, (int, float)):
+            raise TypeError("Can only divide Money by a number")
+        res = self.amount / other
+        return Money(res, self.currency)
