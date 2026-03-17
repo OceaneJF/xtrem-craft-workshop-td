@@ -1,0 +1,95 @@
+name: CI Python
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+on:
+  push:
+    paths:
+      - "python/**"
+      - ".github/workflows/**"
+  pull_request:
+    paths:
+      - "python/**"
+      - ".github/workflows/**"
+
+jobs:
+
+  lint:
+    name: Linter
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: python
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-dependency-glob: "python/pyproject.toml"
+
+      - name: Build
+        run: uv sync
+
+      - name: Run linter
+        run: uv run task mypy
+        continue-on-error: true
+
+  test:
+    name: Tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: python
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-dependency-glob: "python/pyproject.toml"
+
+      - name: Build
+        run: uv sync
+
+      - name: Run tests
+        run: uv run task test
+
+  mutation-tests:
+    name: Mutation Tests
+    needs: test
+    if: github.ref == 'refs/heads/master' || github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: python
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-dependency-glob: "python/pyproject.toml"
+
+      - name: Build
+        run: uv sync
+
+      - name: Run mutation tests
+        run: uv run mutmut run
+        continue-on-error: true
+
+      - name: Export mutation report as JSON
+        run: |
+          mkdir -p ../docs/solution/mutation-testing
+          uv run mutmut stats > ../docs/solution/mutation-testing/mutmut-stats.json
+        continue-on-error: true
+
+      - name: Save mutation report as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mutation-report
+          path: docs/solution/mutation-testing/
