@@ -16,7 +16,6 @@
 
 ## Collaborators
 
-- Océane Jean-François
-- Anh Tin Nguyen
-- Nicolas Veysset
-- Anton Beziat
+- `Currency`: définition des devises
+- `Money`: définition du montant dans une devise
+- `ExchangeRate`: définition du taux d'échange
