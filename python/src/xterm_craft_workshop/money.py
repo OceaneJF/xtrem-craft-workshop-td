@@ -3,6 +3,11 @@ from xterm_craft_workshop.currency import Currency
 
 class Money:
     def __init__(self, amount: int, currency: Currency):
+        if not isinstance(currency, Currency):
+            raise TypeError("currency should be an instance of Currency")
+        if amount < 0:
+            raise ValueError("amount should be positive")
+        
         self.amount = amount
         self.currency = currency
 
