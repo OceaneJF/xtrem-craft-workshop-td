@@ -9,7 +9,7 @@ class Money:
             raise ValueError("amount should be positive")
         
         self.amount = amount
-        self.currency = currency
+        self.currency = currency    
 
     def __add__(self, other):
         if self.currency != other.currency:
