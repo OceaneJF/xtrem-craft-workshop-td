@@ -1,3 +1,5 @@
+import pytest
+
 from xterm_craft_workshop.money import Money
 from xterm_craft_workshop.currency import Currency
 
@@ -33,4 +35,20 @@ class TestMoney:
         assert res == expectedResult
         assert isinstance(res, Money)
 
-    
+    def test_zero_amount_is_valid(self):
+        money = Money(0, Currency.USD)
+        assert money.amount == 0
+
+    def test_invalid_currency_raises_type_error_with_message(self):
+        with pytest.raises(TypeError) as error:
+            Money(10, "Yen")
+        assert str(error.value) == "currency should be an instance of Currency"
+
+    def test_negative_amount_raises_value_error_with_message(self):
+        with pytest.raises(ValueError) as error:
+            Money(-1, Currency.USD)
+        assert str(error.value) == "amount should be positive"
+
+    def test_same_amount_different_currency_are_not_equal(self):
+        assert Money(10, Currency.USD) != Money(10, Currency.EUR)
+
