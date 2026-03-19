@@ -68,3 +68,7 @@ class TestBank:
         with pytest.raises(AttributeError):
             bank.addEchangeRate(Currency.EUR, Currency.USD, 1.2)
 
+    def test_round_tripping_conversion(self):
+        bank = BankBuilder(Currency.EUR).with_exchange_rate(Currency.USD, 1.2).build()
+        converted = bank.convert(Money(10, Currency.USD), Currency.EUR)
+        assert bank.convert(converted, Currency.EUR) == Money(10, Currency.EUR)
