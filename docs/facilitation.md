@@ -78,4 +78,4 @@ Bank implementation :
   - [Concrete Practice: Redesign the bank](./step-by-step/11-implement-test-data-builder.md)
 - [Refactoring with tests]()
   - [Concrete Practice: Redesign the bank](./step-by-step/12-redesign-the-bank.md)
-- [Rétrospective](./step-by-step/13-agile-retrospective.md)
+- [Rétrospective](solution/13-agile-retrospective.md)
