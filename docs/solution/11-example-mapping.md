@@ -104,6 +104,6 @@ Exemple :
 Exemple :
 ``` Bank pivot EUR, taux EUR->USD : 1.2  Convertir 10 EUR en KRW => erreur "EUR->KRW" ```
 
-### Round Tripping a 10^-3
+### Si on convertis un montant d'une devise A vers une devise B, puis qu'on reconvertis le résultat de B vers A, on dois retrouver le montant de départ à 3 chiffres après la virgule près => Round Tripping à 10^-3: Round Tripping a 10^-3
 Exemple :
 ``` EUR->KWN : 0,12 KWN->EUR : 1/0,12 = 8,33 au lieu de 8,333... ```
