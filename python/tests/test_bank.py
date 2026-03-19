@@ -75,8 +75,9 @@ class TestBank:
     # Règle : On ne peut pas ajouter un taux sur une devise qui en a déjà un
     def test_shouldnt_add_existing_exchange_rate(self):
         bank = BankBuilder(Currency.EUR).with_exchange_rate(Currency.USD, 1.2).build()
-        with pytest.raises(AttributeError):
+        with pytest.raises(AttributeError) as error:
             bank.addEchangeRate(ExchangeRate(Currency.USD, 1.2))
+        assert str(error.value) == "Un taux existe déjà pour cette devise"
 
     # Règle : Round Tripping à 10^-3
     def test_round_tripping_conversion(self):
@@ -126,3 +127,42 @@ class TestBank:
         converted = bank.convert(Money(1.45, Currency.USD), Currency.EUR)
 
         assert converted == expected
+
+    # Règle : On doit définir un règlement d'arrondi (pivot -> autre devise)
+    def test_should_round_pivot_to_other_conversion_to_3_decimals(self):
+        bank = BankBuilder(Currency.EUR).with_exchange_rate(Currency.KRW, 1/3).build()
+        expected = Money(3.333, Currency.KRW)
+
+        converted = bank.convert(Money(10, Currency.EUR), Currency.KRW)
+
+        assert converted == expected
+
+    # Règle : On doit définir un règlement d'arrondi (devise tierce -> devise tierce)
+    def test_should_round_third_to_third_conversion_to_3_decimals(self):
+        bank = BankBuilder(Currency.EUR).with_exchange_rate(Currency.USD, 3).with_exchange_rate(Currency.KRW, 1).build()
+        expected = Money(3.333, Currency.KRW)
+
+        converted = bank.convert(Money(10, Currency.USD), Currency.KRW)
+
+        assert converted == expected
+
+    # Règle : On ne peut pas convertir si le taux est manquant (autre -> pivot)
+    def test_should_raise_missing_rate_error_when_converting_to_pivot(self):
+        bank = BankBuilder(Currency.EUR).with_exchange_rate(Currency.USD, 1.2).build()
+        with pytest.raises(MissingExchangeRateError) as error:
+            bank.convert(Money(10, Currency.KRW), Currency.EUR)
+        assert str(error.value) == "KRW->EUR"
+
+    # Règle : On ne peut pas convertir si le taux de la devise source est manquant (tierce -> tierce)
+    def test_should_raise_missing_rate_error_when_from_currency_missing_in_third_to_third(self):
+        bank = BankBuilder(Currency.EUR).with_exchange_rate(Currency.USD, 1.2).build()
+        with pytest.raises(MissingExchangeRateError) as error:
+            bank.convert(Money(10, Currency.KRW), Currency.USD)
+        assert str(error.value) == "KRW->USD"
+
+    # Règle : On ne peut pas convertir si le taux de la devise cible est manquant (tierce -> tierce)
+    def test_should_raise_missing_rate_error_when_to_currency_missing_in_third_to_third(self):
+        bank = BankBuilder(Currency.EUR).with_exchange_rate(Currency.USD, 1.2).build()
+        with pytest.raises(MissingExchangeRateError) as error:
+            bank.convert(Money(10, Currency.USD), Currency.GBP)
+        assert str(error.value) == "USD->GBP"

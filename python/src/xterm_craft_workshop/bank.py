@@ -32,10 +32,6 @@ class Bank:
         return next(er for er in self._exchange_rate if er.currency == currency)
 
     def convert(self, money: Money, to_currency: Currency) -> Money:
-        # Règle : Le montant est obligatoirement non-négatif
-        if money.amount < 0:
-            raise AttributeError("Amount cannot be negative")
-
         # Règle : On peut convertir une devise vers elle-même
         if money.currency == to_currency:
             return Money(money.amount, to_currency)
