@@ -63,3 +63,8 @@ class TestBank:
         with pytest.raises(AttributeError):
             BankBuilder(Currency.EUR).with_exchange_rate(Currency.USD, 0).build()
 
+    def test_shouldnt_add_existing_exchange_rate(self):
+        bank = BankBuilder(Currency.EUR).with_exchange_rate(Currency.USD, 1.2).build()
+        with pytest.raises(AttributeError):
+            bank.addEchangeRate(Currency.EUR, Currency.USD, 1.2)
+
