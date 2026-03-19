@@ -3,8 +3,9 @@ from xterm_craft_workshop.currency import Currency
 
 
 class BankBuilder:
-    def __init__(self):
+    def __init__(self, currency: Currency):
         self._rates: list[tuple[Currency, float]] = []
+        self._pivot: Currency = currency
 
     def with_exchange_rate(self, currency: Currency, rate: float) -> "BankBuilder":
         self._rates.append((currency, rate))
