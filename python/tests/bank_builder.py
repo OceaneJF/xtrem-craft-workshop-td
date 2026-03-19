@@ -10,6 +10,10 @@ class BankBuilder:
         self._pivot:Final[Currency] = currency
 
     def with_exchange_rate(self, currency: Currency, rate: float) -> "BankBuilder":
+        if(currency == self._pivot):
+            raise AttributeError(
+                "Impossible d'ajouter un taux pour la devise pivot"
+            )
         self._rates.append((currency, rate))
         return self
 
