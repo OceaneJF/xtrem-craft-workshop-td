@@ -6,6 +6,7 @@ from xterm_craft_workshop.missing_exchange_rate_error import MissingExchangeRate
 from xterm_craft_workshop.money import Money
 
 from tests.bank_builder import BankBuilder
+from xterm_craft_workshop.exchange_rate import ExchangeRate
 
 
 class TestBank:
@@ -37,14 +38,13 @@ class TestBank:
 
     # Règle : Le taux est toujours défini depuis la devise pivot
     def test_should_convert_with_different_exchange_rate_returns_different_floats(self):
-        bank = BankBuilder(Currency.EUR).with_exchange_rate(Currency.USD, 1.2).build()
-        epsilon = 0.001
+        bank1 = BankBuilder(Currency.EUR).with_exchange_rate(Currency.USD, 1.2).build()
+        bank2 = BankBuilder(Currency.EUR).with_exchange_rate(Currency.USD, 1.3).build()
 
-        converted1 = bank.convert(Money(10, Currency.EUR), Currency.USD)
-        self.bank.addEchangeRate(Currency.EUR, Currency.USD, 1.3)
-        converted2 = bank.convert(Money(10, Currency.EUR), Currency.USD)
+        converted1 = bank1.convert(Money(10, Currency.EUR), Currency.USD)
+        converted2 = bank2.convert(Money(10, Currency.EUR), Currency.USD)
 
-        assert abs(converted1.amount - converted2.amount) < epsilon
+        assert converted1 != converted2
 
     # Règle : Une banque a exactement une devise pivot
     def test_bank_cant_change_pivot(self):
@@ -76,18 +76,19 @@ class TestBank:
     def test_shouldnt_add_existing_exchange_rate(self):
         bank = BankBuilder(Currency.EUR).with_exchange_rate(Currency.USD, 1.2).build()
         with pytest.raises(AttributeError):
-            bank.addEchangeRate(Currency.EUR, Currency.USD, 1.2)
+            bank.addEchangeRate(ExchangeRate(Currency.USD, 1.2))
 
     # Règle : Round Tripping à 10^-3
     def test_round_tripping_conversion(self):
         bank = BankBuilder(Currency.EUR).with_exchange_rate(Currency.USD, 1.2).build()
         converted = bank.convert(Money(10, Currency.USD), Currency.EUR)
-        assert bank.convert(converted, Currency.EUR) == Money(10, Currency.EUR)
+        reconverted = bank.convert(converted, Currency.USD)
+        assert abs(reconverted.amount - 10) < 0.001
 
     # Règle : Le montant est obligatoirement non-négatif
     def test_shouldnt_convert_negative_amount(self):
         bank = BankBuilder(Currency.EUR).with_exchange_rate(Currency.USD, 1.2).build()
-        with pytest.raises(AttributeError):
+        with pytest.raises(ValueError):
             bank.convert(Money(-10, Currency.EUR), Currency.USD)
 
     # Règle : On peut convertir une devise vers elle-même
