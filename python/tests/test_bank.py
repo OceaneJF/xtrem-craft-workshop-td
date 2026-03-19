@@ -41,3 +41,7 @@ class TestBank:
         converted2 = bank.convert(Money(10, Currency.EUR), Currency.USD)
 
         assert abs(converted1.amount - converted2.amount) < epsilon
+
+    def test_should_have_unique_pivot(self) :
+        bank = BankBuilder(Currency.EUR).build()
+        assert bank.pivot == Currency.EUR
