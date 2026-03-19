@@ -42,10 +42,15 @@ class TestBank:
 
         assert abs(converted1.amount - converted2.amount) < epsilon
 
-    def test_should_have_unique_pivot(self) :
+    def test_bank_cant_change_pivot(self):
         bank = BankBuilder(Currency.EUR).build()
-        assert bank.pivot == Currency.EUR
+        with pytest.raises(AttributeError):
+            bank.pivot = Currency.USD
 
-    def test_have_a_pivot_currency(self) :
-        bank = BankBuilder().build()
+    def test_should_have_a_pivot_currency(self) :
+        with pytest.raises(AttributeError):
+            BankBuilder().build()
+
+
+
 
