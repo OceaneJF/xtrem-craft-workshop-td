@@ -92,7 +92,7 @@ Exemple :
 ``` Bank pivot EUR, taux EUR->USD : 1.2, EUR->GBP : 1.5  Convertir 10 USD en GBP => (10 / 1.2) * 1.5 = 12.5 GBP ```
 #### On peut convertir vers la devise pivot
 Exemple : 
-``` Bank pivot EUR, taux USD : 1.2   Convertir 12 USD en EUR => 12 / 1.2 = 10 EUR ```
+``` Bank pivot EUR, taux USD : 1.2  Convertir 12 USD en EUR => 12 / 1.2 = 10 EUR ```
 
 ### On peut convertir une devise vers elle-même
 
