@@ -45,3 +45,7 @@ class TestBank:
     def test_should_have_unique_pivot(self) :
         bank = BankBuilder(Currency.EUR).build()
         assert bank.pivot == Currency.EUR
+
+    def test_have_a_pivot_currency(self) :
+        bank = BankBuilder().build()
+
