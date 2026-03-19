@@ -4,16 +4,13 @@ from xterm_craft_workshop.currency import Currency
 
 
 class BankBuilder:
-    def __init__(self, currency: Currency):
+    def __init__(self, currency: Currency = None):
         self._rates: list[tuple[Currency, float]] = []
-
-        self._pivot:Final[Currency] = currency
+        self._pivot: Final[Currency] = currency
 
     def with_exchange_rate(self, currency: Currency, rate: float) -> "BankBuilder":
-        if(currency == self._pivot):
-            raise AttributeError(
-                "Impossible d'ajouter un taux pour la devise pivot"
-            )
+        if currency == self._pivot:
+            raise AttributeError("Impossible d'ajouter un taux pour la devise pivot")
         self._rates.append((currency, rate))
         return self
 

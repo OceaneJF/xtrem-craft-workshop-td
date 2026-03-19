@@ -55,7 +55,11 @@ class TestBank:
         with pytest.raises(AttributeError):
             bank = BankBuilder(Currency.EUR).with_exchange_rate(Currency.EUR, 1.2).build()
 
+    def test_shouldnt_add_negative_exchange_rate(self):
+        with pytest.raises(AttributeError):
+            BankBuilder(Currency.EUR).with_exchange_rate(Currency.USD, -1.2).build()
 
-
-
+    def test_shouldnt_add_zero_exchange_rate(self):
+        with pytest.raises(AttributeError):
+            BankBuilder(Currency.EUR).with_exchange_rate(Currency.USD, 0).build()
 
